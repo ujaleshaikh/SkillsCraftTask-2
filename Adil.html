@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Encryption Tool</title>
+
+<style>
+body{
+font-family: Arial;
+text-align:center;
+background:#f4f4f4;
+}
+
+.container{
+background:white;
+padding:20px;
+width:500px;
+margin:auto;
+margin-top:50px;
+border-radius:10px;
+box-shadow:0px 0px 10px gray;
+}
+
+canvas{
+border:1px solid black;
+margin-top:10px;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+background:blue;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:darkblue;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Simple Image Encryption Tool</h2>
+
+<input type="file" id="upload">
+
+<br>
+
+<canvas id="canvas"></canvas>
+
+<br>
+
+<button onclick="encryptImage()">Encrypt</button>
+<button onclick="decryptImage()">Decrypt</button>
+
+</div>
+
+<script>
+
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+
+document.getElementById("upload").addEventListener("change", function(e){
+
+let file = e.target.files[0];
+let reader = new FileReader();
+
+reader.onload = function(event){
+
+let img = new Image();
+
+img.onload = function(){
+
+canvas.width = img.width;
+canvas.height = img.height;
+
+ctx.drawImage(img,0,0);
+
+}
+
+img.src = event.target.result;
+
+}
+
+reader.readAsDataURL(file);
+
+});
+
+function encryptImage(){
+
+let imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+let data = imageData.data;
+
+for(let i=0;i<data.length;i+=4){
+
+data[i] = data[i] ^ 50;     
+data[i+1] = data[i+1] ^ 50; 
+data[i+2] = data[i+2] ^ 50; 
+
+}
+
+ctx.putImageData(imageData,0,0);
+
+}
+
+function decryptImage(){
+
+let imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+let data = imageData.data;
+
+for(let i=0;i<data.length;i+=4){
+
+data[i] = data[i] ^ 50;
+data[i+1] = data[i+1] ^ 50;
+data[i+2] = data[i+2] ^ 50;
+
+}
+
+ctx.putImageData(imageData,0,0);
+
+}
+
+</script>
+
+</body>
+</html>
